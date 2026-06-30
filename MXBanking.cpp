@@ -294,9 +294,7 @@ int main()
     std::cout << "Welcome " << app.username << "!\n";
     std::cout << "========================================== \n";
     std::cout << "============ MXBanking System ============ \n";
-     
-    //Account MaxAccount("Max Cornelius", Currency::UAH, RandomDouble(0, 10000));
-     
+       
     auto MaxAccount = std::make_unique<Account>("maksymba0", Currency::PLN, RandomDouble(0, 35000));
     auto BotAccount = std::make_unique<Account>("Bot", Currency::PLN, RandomDouble(0, 500));
     auto AdminAccount = std::make_unique<Account>("Admin", Currency::PLN, RandomDouble(0, 50000));
