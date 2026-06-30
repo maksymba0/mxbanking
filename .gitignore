@@ -1,0 +1,10 @@
+# Ignore the hidden Visual Studio temporary folder
+.vs/
+
+# Ignore build output directories
+Debug/
+Release/
+x64/
+x86/
+bin/
+obj/
