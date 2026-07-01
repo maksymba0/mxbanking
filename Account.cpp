@@ -24,7 +24,7 @@ void Account::SetID(int _ID)
 {
     ID = _ID;
 }
-int Account::GetID()
+int Account::GetID() const
 {
     return ID;
 }
@@ -52,17 +52,17 @@ bool Account::GiveTo(Account* other, double amount)
     }
 
     this->SubBalance(amount);
-    other->AddBalance(amount);
+    other->AddBalance(amount,"Bank Transfer");
 
 
     return true;
 
 }
 
-Currency Account::getCurrency() { return currency; }
-double Account::getBalance() { return balance; }
+Currency Account::getCurrency() const { return currency; }
+double Account::getBalance() const { return balance; }
 
-std::string Account::getName() { return name; }
+std::string Account::getName() const { return name; }
 
 void Account::Dump()
 {
@@ -99,13 +99,23 @@ void Account::AddBalance(double _value)
 {
     oldBalance = balance;
     balance += _value;
-    std::cout << "[Account operation]: Added " << getCurrencyText(getCurrency()) << _value << " to " << getName() << "'s account (" << balance << ")\n";
+}
+void Account::AddBalance(double _value, const char* reason)
+{
+    static const char* reasonUnk = "#InvalidReason";
+    if (!reason)
+    {
+        reason = reasonUnk;
+    }
+    AddBalance(_value);
+    std::cout << "[Account operation]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
+    //std::cout << "[Account operation]: Added " << getCurrencyText(getCurrency()) << _value << " to " << getName() << "'s account (" << balance << ")\n";
 }
 void Account::SubBalance(double _value)
 {
     oldBalance = balance;
     balance -= _value;
-    std::cout << "[Account operation]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (" << balance << ")\n";
+    std::cout << "[Account operation]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
 }
 void Account::SetBalance(double _value)
 {

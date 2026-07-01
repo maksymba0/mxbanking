@@ -29,22 +29,46 @@ void App::SimulateTransactions()
         {
             break;
         } 
+        int Action = RandomInt(0, 5);
         int MAX_USERS = accountDB.accounts.size();
-        int subjectIndex = RandomInt(0, MAX_USERS);
-        int targetIndex = RandomInt(0, MAX_USERS);
-        while (targetIndex == subjectIndex)
+
+        switch (Action)
         {
-            targetIndex = RandomInt(0, MAX_USERS); // Ensure these not the same customers
-        }
+            case 1:
+            {
+                int subjectIndex = RandomInt(0, MAX_USERS);
 
-        Account* Subject = this->accountDB.GetAccountByIndex(subjectIndex);
-        Account* Target = this->accountDB.GetAccountByIndex(targetIndex);
+                Account* Subject = this->accountDB.GetAccountByIndex(subjectIndex);
 
-        if (Subject)
-        {
-            double amount = RandomDouble(0, static_cast<double>(Subject->getBalance() / 2));
+                if (Subject)
+                {
+                    double amount = RandomDouble(0, static_cast<double>(Subject->getBalance() / 2));
+                    
+                    Subject->AddBalance(amount,"ATM Deposit");
+                }
+                break;
+            }
+            case 0: 
+            default:
+            {
+                int subjectIndex = RandomInt(0, MAX_USERS);
+                int targetIndex = RandomInt(0, MAX_USERS);
+                while (targetIndex == subjectIndex)
+                {
+                    targetIndex = RandomInt(0, MAX_USERS); // Ensure these not the same customers
+                }
 
-            Subject->GiveTo(Target, amount);
+                Account* Subject = this->accountDB.GetAccountByIndex(subjectIndex);
+                Account* Target = this->accountDB.GetAccountByIndex(targetIndex);
+
+                if (Subject)
+                {
+                    double amount = RandomDouble(0, static_cast<double>(Subject->getBalance() / 2));
+
+                    Subject->GiveTo(Target, amount);
+                }
+                break;
+            }
         }
         Sleep(DelayTime);
     }
