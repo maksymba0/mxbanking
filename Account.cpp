@@ -78,22 +78,22 @@ void Account::SetName(std::string newname)
 {
     if (newname.empty())
     {
-        std::cout << "[Account operation]: Failed to set currency [Invalid currency]\n";
+        std::cout << "[Account]: Failed to set currency [Invalid currency]\n";
         return;
     }
     name = newname;
-    std::cout << "[Account operation]: Changed name to " << name << "\n";
+    std::cout << "[Account]: Changed name to " << name << "\n";
     return;
 }
 void Account::SetCurrency(Currency _currency)
 {
     if (_currency < Currency::PLN || _currency >= Currency::Limit)
     {
-        std::cout << "[Account operation]: Failed to set currency [Invalid currency]\n";
+        std::cout << "[Account]: Failed to set currency [Invalid currency]\n";
         return;
     }
     currency = _currency;
-    std::cout << "[Account operation]: Currency set to " << getCurrencyText(currency) << "\n";
+    std::cout << "[Account]: Currency set to " << getCurrencyText(currency) << "\n";
 }
 void Account::AddBalance(double _value)
 {
@@ -108,20 +108,21 @@ void Account::AddBalance(double _value, const char* reason)
         reason = reasonUnk;
     }
     AddBalance(_value);
-    std::cout << "[Account operation]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
+    std::cout << getTime();
+    std::cout << "[Account]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
     //std::cout << "[Account operation]: Added " << getCurrencyText(getCurrency()) << _value << " to " << getName() << "'s account (" << balance << ")\n";
 }
 void Account::SubBalance(double _value)
 {
     oldBalance = balance;
     balance -= _value;
-    std::cout << "[Account operation]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
+    std::cout << "[Account]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
 }
 void Account::SetBalance(double _value)
 {
     oldBalance = balance;
     balance = _value;
-    std::cout << "[Account operation]: Balance set to " << getCurrencyText(getCurrency()) << balance << "\n";
+    std::cout << "[Account]: Balance set to " << getCurrencyText(getCurrency()) << balance << "\n";
 }
 Account::Account() : name(name), currency(Currency::PLN), balance(0.0), ID(0)
 { 
@@ -138,12 +139,17 @@ Account::Account(std::string name, int _ID) : name(name), currency(Currency::PLN
 
 Account& Account::operator=(Account& ptr)
 {
+    if (this == &ptr)
+    {
+        return *this;
+    }
     
     SetBalance(ptr.getBalance());
     SetCurrency(ptr.getCurrency());
     SetID(ptr.GetID());
     SetName(ptr.getName());
-     
+ 
+    return *this;
 }
 
  

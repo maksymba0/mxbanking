@@ -1,7 +1,7 @@
 #include "AccountDatabase.h"
 #include "Account.h"
 #include "Utils.h"
-Account* AccountDatabase::Add(std::unique_ptr<Account> pAccount)
+Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
 {
     auto obj = pAccount.get();
     accounts.push_back(std::move(pAccount));
@@ -55,4 +55,10 @@ void AccountDatabase::Dump()
         obj->Dump();
     }
     std::cout << "\n";
+}
+
+AccountDatabase::~AccountDatabase()
+{
+    std::cout << "\n----------CLOSING DB -----------\n";
+    this->accounts.clear();
 }

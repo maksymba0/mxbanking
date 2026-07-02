@@ -12,7 +12,12 @@ public:
     void SimulateTransactions();
 
     bool Auth();
+    
+     
+
     App();
+    App(const App& other) = delete;
+    App& operator=(const App& other) = delete;
     ~App();
 
 };

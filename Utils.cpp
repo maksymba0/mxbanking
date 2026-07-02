@@ -1,6 +1,10 @@
 #include "Utils.h"
 
 #include <random>
+#include <string>
+#include <format>
+#include <chrono>
+
 double RandomDouble(double min, double max)
 {
     static std::random_device rd;
@@ -27,4 +31,15 @@ int RandomInt(int min, int max)
     std::uniform_int_distribution<int> distrib(min, max);
     return distrib(gen);
 
+}
+
+std::string getTime()
+{
+    auto time = std::chrono::system_clock::now();
+    
+    auto ms = std::chrono::time_point_cast<std::chrono::seconds>(time);
+
+    std::string result = std::format("[{:%H:%M:%S}]", ms);
+
+    return result;
 }

@@ -4,9 +4,9 @@
 class Account;
 class AccountDatabase
 {
+     
 public:
     std::vector<std::shared_ptr<Account>> accounts;
-
     Account* Add(std::shared_ptr<Account> pAccount);
     void Remove(std::unique_ptr<Account> pAccount);
 
@@ -16,5 +16,6 @@ public:
     int GenerateRandomID();
 
     void Dump();
+    ~AccountDatabase();
 };
 
