@@ -1,6 +1,7 @@
 #include "Account.h"
 #include <iostream>  
 #include "Utils.h"
+#include "Logger.h"
 
 const char* getCurrencyText(Currency code)
 {
@@ -32,22 +33,26 @@ bool Account::GiveTo(Account* other, double amount)
 {
     if (amount <= 0.00)
     {
-        std::cout << "[Account Transaction Error]: Unable to transfer (#INVALIDAMOUNT)\n";
+        Log.ErrorMsg("Unable to transfer (#INVALIDAMOUNT)\n", "[Account Transaction Error]");
+        //std::cout << "[Account Transaction Error]: Unable to transfer (#INVALIDAMOUNT)\n";
         return false;
     }
     if (!other)
     {
-        std::cout << "[Account Transaction Error]: Unable to transfer (#NORECIPIENT)\n";
+        Log.ErrorMsg("Unable to transfer (#NORECIPIENT)\n", "[Account Transaction Error]");
+        //std::cout << "[Account Transaction Error]: Unable to transfer (#NORECIPIENT)\n";
         return false;
     }
     if (getBalance() < amount)
     {
-        std::cout << "[Account Transaction Error]: Unable to transfer (#NOTENOUGHMONEY)\n";
+        Log.ErrorMsg("Unable to transfer (#NOTENOUGHMONEY)\n", "[Account Transaction Error]");
+        //std::cout << "[Account Transaction Error]: Unable to transfer (#NOTENOUGHMONEY)\n";
         return false;
     }
     if (other->getCurrency() != getCurrency())
     {
-        std::cout << "[Account Transaction Error]: Unable to transfer (#CURRENCYMISMATCH)\n";
+        Log.ErrorMsg("Unable to transfer (#CURRENCYMISMATCH)\n", "[Account Transaction Error]");
+        //std::cout << "[Account Transaction Error]: Unable to transfer (#CURRENCYMISMATCH)\n";
         return false;
     }
 
@@ -109,22 +114,27 @@ void Account::AddBalance(double _value, const char* reason)
     }
     AddBalance(_value);
     std::cout << getTime();
-    std::cout << "[Account]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
-    //std::cout << "[Account operation]: Added " << getCurrencyText(getCurrency()) << _value << " to " << getName() << "'s account (" << balance << ")\n";
+    std::string message = "[Account]: " + getName() + " received " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " ( " + std::string(getCurrencyText(getCurrency())) + " " + std::to_string(balance) + " ) - " + reason + "\n";
+    Log.InformationMsg(message);
+    //std::cout << "[Account]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
 }
 void Account::SubBalance(double _value)
 {
     oldBalance = balance;
     balance -= _value;
-    std::cout << "[Account]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
+    std::string message = "[Account]: Subtracted " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " from " + getName() + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance) + ")\n";
+    Log.InformationMsg(message);
+    //std::cout << "[Account]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
 }
 void Account::SetBalance(double _value)
 {
     oldBalance = balance;
     balance = _value;
-    std::cout << "[Account]: Balance set to " << getCurrencyText(getCurrency()) << balance << "\n";
+    std::string message = "[Account]: Balance set to " + std::string(getCurrencyText(getCurrency())) + std::to_string(balance) + "\n";
+    Log.InformationMsg(message);
+    //std::cout << "[Account]: Balance set to " << getCurrencyText(getCurrency()) << balance << "\n";
 }
-Account::Account() : name(name), currency(Currency::PLN), balance(0.0), ID(0)
+Account::Account() : name(name), currency(Currency::PLN), balance(0.0), ID(0), oldBalance(0.0)
 { 
     std::cout << "[Account]: Account created - (0x" << this << ")\n";
 }
