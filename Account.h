@@ -14,6 +14,8 @@ enum class Currency : int
 };
 const char* getCurrencyText(Currency code);
 
+extern bool DisplayErrors;
+
 class Account
 {
 private:

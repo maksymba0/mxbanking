@@ -1,7 +1,11 @@
 #include "Account.h"
 #include <iostream>  
 #include "Utils.h"
+
 #include "Logger.h"
+
+bool DisplayErrors = false;
+
 
 const char* getCurrencyText(Currency code)
 {
@@ -33,26 +37,43 @@ bool Account::GiveTo(Account* other, double amount)
 {
     if (amount <= 0.00)
     {
-        Log.ErrorMsg("Unable to transfer (#INVALIDAMOUNT)\n", "[Account Transaction Error]");
+
+         
         //std::cout << "[Account Transaction Error]: Unable to transfer (#INVALIDAMOUNT)\n";
+
+        if(DisplayErrors)
+            Log.ErrorMsg("Unable to transfer (#INVALIDAMOUNT)\n", "[Account Transaction Error]");
         return false;
     }
     if (!other)
     {
-        Log.ErrorMsg("Unable to transfer (#NORECIPIENT)\n", "[Account Transaction Error]");
+
+         
         //std::cout << "[Account Transaction Error]: Unable to transfer (#NORECIPIENT)\n";
+
+        if (DisplayErrors)
+            Log.ErrorMsg("Unable to transfer (#NORECIPIENT)\n", "[Account Transaction Error]");
+
         return false;
     }
     if (getBalance() < amount)
     {
-        Log.ErrorMsg("Unable to transfer (#NOTENOUGHMONEY)\n", "[Account Transaction Error]");
+
+         
         //std::cout << "[Account Transaction Error]: Unable to transfer (#NOTENOUGHMONEY)\n";
+        if (DisplayErrors)
+            Log.ErrorMsg("Unable to transfer (#NOTENOUGHMONEY)\n", "[Account Transaction Error]");
+
         return false;
     }
     if (other->getCurrency() != getCurrency())
     {
-        Log.ErrorMsg("Unable to transfer (#CURRENCYMISMATCH)\n", "[Account Transaction Error]");
+
+         
         //std::cout << "[Account Transaction Error]: Unable to transfer (#CURRENCYMISMATCH)\n";
+
+        if (DisplayErrors)
+            Log.ErrorMsg("Unable to transfer (#CURRENCYMISMATCH)\n", "[Account Transaction Error]");
         return false;
     }
 
