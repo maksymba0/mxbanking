@@ -5,9 +5,9 @@ class Account;
 class AccountDatabase
 {
 public:
-    std::vector<std::unique_ptr<Account>> accounts;
+    std::vector<std::shared_ptr<Account>> accounts;
 
-    Account* Add(std::unique_ptr<Account> pAccount);
+    Account* Add(std::shared_ptr<Account> pAccount);
     void Remove(std::unique_ptr<Account> pAccount);
 
     Account* GetAccountByIndex(int Index);

@@ -27,15 +27,15 @@ private:
 public:
 
     void SetID(int _ID);
-    int GetID();
+    int GetID() const;
 
     bool GiveTo(Account* other, double amount);
     
 
-    Currency getCurrency();
-    double getBalance();
+    Currency getCurrency() const;
+    double getBalance() const;
 
-    std::string getName();
+    std::string getName() const;
     void Dump();
     void SetName(std::string newname);
     void SetCurrency(Currency _currency);

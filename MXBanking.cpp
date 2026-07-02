@@ -44,19 +44,19 @@ int main()
     std::cout << "========================================== \n";
     std::cout << "============ MXBanking System ============ \n";
  
-    auto MaxAccount = std::make_unique<Account>("maksymba0", Currency::PLN, RandomDouble(0, 4000), app.GenerateRandomUserID());
-    auto MariaAccount = std::make_unique<Account>("Maria", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto JohnsonAccount = std::make_unique<Account>("Johnson", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto AndreaAccount = std::make_unique<Account>("Andrea", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto LeonAccount = std::make_unique<Account>("Leon", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
+    auto MaxAccount = std::make_shared<Account>("maksymba0", Currency::PLN, RandomDouble(0, 4000), app.GenerateRandomUserID());
+    auto MariaAccount = std::make_shared<Account>("Maria", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
+    auto JohnsonAccount = std::make_shared<Account>("Johnson", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
+    auto AndreaAccount = std::make_shared<Account>("Andrea", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
+    auto LeonAccount = std::make_shared<Account>("Leon", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
 
     Account* pAccount = nullptr;
 
-    app.accountDB.Add(std::move(MaxAccount));
-    app.accountDB.Add(std::move(MariaAccount));
-    app.accountDB.Add(std::move(JohnsonAccount));
-    app.accountDB.Add(std::move(AndreaAccount));
-    app.accountDB.Add(std::move(LeonAccount));
+    app.accountDB.Add(MaxAccount);
+    app.accountDB.Add(MariaAccount);
+    app.accountDB.Add(JohnsonAccount);
+    app.accountDB.Add(AndreaAccount);
+    app.accountDB.Add(LeonAccount);
       
     app.accountDB.Dump();
 
