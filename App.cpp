@@ -97,7 +97,7 @@ bool App::Auth()
             continue;
         }
 
-        if (input == 123) // 9735052
+        if (input == 4444) // 9735052
         {
             break; // ok
         }
