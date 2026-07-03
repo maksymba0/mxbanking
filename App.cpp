@@ -97,7 +97,7 @@ bool App::Auth()
             continue;
         }
 
-        if (input == 123) // 9735052
+        if (input == 0x1) // 9735052
         {
             break; // ok
         }
