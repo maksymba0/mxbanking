@@ -96,8 +96,8 @@ bool App::Auth()
             std::cin.ignore(1000, '\n');
             continue;
         }
-
-        if (input == 0x1) // 9735052
+         
+        if (input == 4444) // 9735052 
         {
             break; // ok
         }

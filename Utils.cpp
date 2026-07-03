@@ -4,6 +4,16 @@
 #include <string>
 #include <format>
 #include <chrono>
+template <typename T>
+T Random(T min, T max)
+{
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    std::uniform_real_distribution<T> distrib(min, max);
+    return distrib(gen);
+
+}
 
 double RandomDouble(double min, double max)
 {
