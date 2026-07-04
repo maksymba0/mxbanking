@@ -41,7 +41,7 @@ public:
     Currency getCurrency() const;
     std::string getName() const;
 
-    //bool GiveTo(Account* other, double amount);
+    bool GiveTo(Account* other, double amount);
      
 
      
