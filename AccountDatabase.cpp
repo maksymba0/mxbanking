@@ -22,11 +22,23 @@ Account* AccountDatabase::GetAccountByIndex(int Index)
     return accounts[Index].get();
 }
 
-Account* AccountDatabase::GetAccountByUniqueID(int ID)
+Account* AccountDatabase::GetAccountByUniqueID(int ID, AccountType type = AccountType::Test)
 {
     for (const auto& obj : accounts)
     {
-        if (obj->GetID() == ID)
+        if (obj->GetID() == ID && type == obj->GetType())
+        {
+            return obj.get();
+        }
+    }
+    return nullptr;
+}
+
+Account* AccountDatabase::GetAccountByName(const char* name, AccountType type)
+{
+    for (const auto& obj : accounts)
+    {
+        if (!strcmp(obj->getName().c_str(), name))
         {
             return obj.get();
         }
@@ -41,7 +53,7 @@ int AccountDatabase::GenerateRandomID()
     do
     {
         ID = RandomInt(0, 10000);
-    } while (GetAccountByUniqueID(ID));
+    } while (GetAccountByUniqueID(ID,AccountType::Personal));
 
     return ID;
 

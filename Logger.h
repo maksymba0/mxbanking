@@ -2,7 +2,7 @@
 #include <string>
 class Logger
 {
-	bool ShowMsg, ShowErrors, ShowInformation;
+	 
 
 public: 
 
@@ -10,6 +10,7 @@ public:
 	void ErrorMsg(std::string message, const char* ErrorType);
 	void InformationMsg(std::string message);
 
+	bool ShowMsg, ShowErrors, ShowInformation;
 	Logger();
 };
 

@@ -33,6 +33,10 @@ int Account::GetID() const
 {
     return ID_;
 }
+AccountType Account::GetType() const
+{
+    return type_;
+}
 bool Account::GiveTo(Account* other, double amount)
 {
     if (amount <= 0.00)
@@ -56,7 +60,7 @@ bool Account::GiveTo(Account* other, double amount)
 
         return false;
     }
-    if (getBalance() < amount)
+    if (balance_ < amount)
     {
 
          
@@ -94,12 +98,22 @@ std::string Account::getName() const { return name_; }
 void Account::Dump()
 {
     double balance = 0.0;
-    std::cout << "Name: " << getName() << " | Currency: "
+    const char* type = "Testing | ";
+    
+    switch (type_)
+    {
+    case AccountType::Personal:
+        type = "Personal | ";
+        break;
+    case AccountType::Savings:
+        type = "Savings | ";
+        break;
+    }
+
+    std::cout << type << "Name: " << getName() << " | Currency: "
         << getCurrencyText(currency_) << " | Amount: "
-        << getBalance()
-        << "\n";
-    std::string name = "#Empty";
-    Currency currency = Currency::Limit;
+        << balance_
+        << "\n"; 
 }
 void Account::SetName(std::string newname)
 {
@@ -144,7 +158,7 @@ void Account::SubBalance(double _value)
 {
     oldBalance_ = balance_;
     balance_ -= _value;
-    std::string message = "[Account]: Subtracted " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " from " + getName() + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance) + ")\n";
+    std::string message = "[Account]: Subtracted " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " from " + getName() + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
     Log.InformationMsg(message);
     //std::cout << "[Account]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
 }
@@ -156,17 +170,21 @@ void Account::SetBalance(double _value)
     Log.InformationMsg(message);
     //std::cout << "[Account]: Balance set to " << getCurrencyText(getCurrency()) << balance << "\n";
 }
-Account::Account() : name_(""), currency_(Currency::PLN), balance_(0.0), ID_(0), oldBalance_(0.0)
+Account::Account() : name_(""), currency_(Currency::PLN), balance_(0.0), ID_(0), oldBalance_(0.0), type_(AccountType::Test)
 { 
     std::cout << "[Account]: Account created - (0x" << this << ")\n";
 }
-Account::Account(std::string name, Currency currency, double value, int _ID) : name_(name), currency_(currency), balance_(value), ID_(_ID)
+Account::Account(std::string name, Currency currency, double value, int _ID) : name_(name), currency_(currency), balance_(value), ID_(_ID), type_(AccountType::Test)
 {
-    std::cout << "[Account]: Account " << _ID << " created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << getBalance() << "\n";
+    std::cout << "[Account]: Account " << _ID << " created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << balance_ << "\n";
 }
-Account::Account(std::string name, int _ID) : name_(name), currency_(Currency::PLN), balance_(0.0), ID_(_ID)
+Account::Account(std::string name, Currency currency, double value, int _ID, AccountType type) : name_(name), currency_(Currency::PLN), balance_(value), ID_(_ID), type_(type)
 {
-    std::cout << "[Account]: Account "<<_ID<<" created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << getBalance() << "\n";
+    std::cout << "[Account]: Account " << _ID << " created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << balance_ << " (type: " << static_cast<int>(type)<< "\n";
+}
+Account::Account(std::string name, int _ID) : name_(name), currency_(Currency::PLN), balance_(0.0), ID_(_ID), type_(AccountType::Test)
+{
+    std::cout << "[Account]: Account "<<_ID<<" created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << balance_ << "\n";
 }
 
 Account& Account::operator=(Account& ptr)
@@ -176,7 +194,7 @@ Account& Account::operator=(Account& ptr)
         return *this;
     }
     
-    SetBalance(ptr.getBalance());
+    SetBalance(ptr.balance_);
     SetCurrency(ptr.getCurrency());
     SetID(ptr.GetID());
     SetName(ptr.getName());

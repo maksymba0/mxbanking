@@ -12,6 +12,12 @@ enum class Currency : int
     CAD = 7,
     Limit
 };
+enum class AccountType : int
+{
+    Test = 0,
+    Personal = 1,
+    Savings,
+};
 const char* getCurrencyText(Currency code);
 
 extern bool DisplayErrors;
@@ -19,13 +25,13 @@ extern bool DisplayErrors;
 class Account
 {
 protected:
-    double oldBalance, balance;
-    std::string name;
-    Currency currency;
+    double oldBalance_, balance_;
+    std::string name_;
+    Currency currency_;
 private:
 
-    int ID;
- 
+    int ID_;
+    AccountType type_;
 
  
 
@@ -38,6 +44,7 @@ public:
     
     void SetID(int _ID);
     int GetID() const;
+    AccountType GetType() const;
     Currency getCurrency() const;
     std::string getName() const;
 
@@ -62,6 +69,7 @@ public:
 
     Account();
     Account(std::string name, Currency currency, double value, int _ID);
+    Account(std::string name, Currency currency, double value, int _ID, AccountType type);
     Account(std::string name, int _ID);
     
      
