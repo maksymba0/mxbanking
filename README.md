@@ -2,6 +2,9 @@
 
 A deliberately vulnerable C++ banking app built to practice static & dynamic reverse engineering.
 
+<img width="1367" height="911" alt="image" src="https://github.com/user-attachments/assets/a4617ed4-ddd6-43e7-b6bc-6f911cb9d3db" />
+
+
 <img width="1020" height="758" alt="Screenshot 2026-06-30 211224" src="https://github.com/user-attachments/assets/ec79303e-a92c-4c23-a4e8-09db80f2dc4a" />
 
 
