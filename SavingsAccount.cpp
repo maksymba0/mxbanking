@@ -2,5 +2,5 @@
 
 double SavingsAccount::getBalance() const
 {
-	return balance + (balance*0.02);
+	return balance_ + (balance_*0.02);
 }

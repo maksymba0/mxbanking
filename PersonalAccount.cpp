@@ -7,5 +7,5 @@ bool PersonalAccount::SendMoneyTo(int accountID, double amount)
 
 double PersonalAccount::getBalance() const
 {
-    return 0.0;
+    return balance_ - .5;
 }
