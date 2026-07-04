@@ -1,5 +1,6 @@
 #include "PersonalAccount.h"
 #include "AccountDatabase.h"
+#include "Logger.h"
 bool PersonalAccount::SendMoneyTo(int accountID, double amount)
 {
     return false;
@@ -7,7 +8,15 @@ bool PersonalAccount::SendMoneyTo(int accountID, double amount)
 
 double PersonalAccount::getBalance() const
 {
-    return balance_ - .5;
+    return balance_;
+}
+
+void PersonalAccount::ApplyMonthlyFees()
+{
+    static double fee = 35.99;
+    SubBalance(fee);
+    std::string message = "Mountly fees Subtract " + std::string(getCurrencyText(getCurrency())) + std::to_string(fee) + " from " + getName() + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
+    Log.InformationMsg(message);
 }
 
  

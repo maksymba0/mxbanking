@@ -26,10 +26,6 @@ void Logger::ErrorMsg(std::string message, const char* ErrorType = nullptr)
 
 void Logger::InformationMsg(std::string message)
 {
-	if (!ShowInformation)
-	{
-		return;
-	}
 	std::cout << "[Information]: " << message;
 }
 

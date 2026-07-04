@@ -1,7 +1,18 @@
 #include "SavingsAccount.h"
+#include "Logger.h"
 double SavingsAccount::getBalance() const
 {
-	return balance_ + (balance_*0.02);
+    return balance_;
+}
+
+void SavingsAccount::ApplyMonthlyFees()
+{
+    static double fee = 0.02;
+
+    double interest = getBalance() * fee;
+    AddBalance(interest);
+    std::string message = "Savings interest Add " + std::string(getCurrencyText(getCurrency())) + std::to_string(interest) + " to " + getName() + "'s savings account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
+    Log.InformationMsg(message);
 }
 
 SavingsAccount::SavingsAccount() : Account()

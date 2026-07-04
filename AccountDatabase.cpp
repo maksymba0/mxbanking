@@ -46,6 +46,18 @@ Account* AccountDatabase::GetAccountByName(const char* name, AccountType type)
     return nullptr;
 }
 
+void AccountDatabase::ApplyFees()
+{
+    for (const auto& obj : accounts)
+    {
+        auto type = obj->GetType();
+        if (type == AccountType::Personal || type == AccountType::Savings)
+        {
+            obj->ApplyMonthlyFees();
+        }
+    }
+}
+
 int AccountDatabase::GenerateRandomID()
 {
     int ID = 0;

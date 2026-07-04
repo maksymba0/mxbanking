@@ -33,8 +33,6 @@ int main()
         exit(-1);
     }
 
-    Sleep(100);
-
     char buffer[256] = { 0 };
     DWORD buffersize = sizeof(buffer); 
     GetUserName(buffer, &buffersize);
@@ -69,13 +67,14 @@ int main()
     auto Savings = dynamic_cast<SavingsAccount*>(savings);
     
     Log.ShowMsg = true;
+    Log.ShowInformation = true;
+    Log.ShowErrors = true;
 
-
-    Savings->Dump();
+     
     app.accountDB.Dump();
-
-    //app.SimulateTransactions();
-    MaxAccount->Dump();
+    //app.SimulateTransactions(); 
+    app.accountDB.ApplyFees();
+    app.accountDB.Dump();
      
     Log.PrintMsg("MaxAccount's balance: " + std::to_string(MaxAccount->getBalance()) + "\n Savings:" + std::to_string(MaxSavingAccount->getBalance()));
     

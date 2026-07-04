@@ -6,6 +6,7 @@ public:
 	bool SendMoneyTo(int accountID, double amount);
 
 	double getBalance() const override;
+	void ApplyMonthlyFees() override;
 
 	PersonalAccount();
 	PersonalAccount(std::string name, Currency currency, double value, int _ID);

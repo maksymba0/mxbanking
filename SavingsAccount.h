@@ -5,6 +5,7 @@ class SavingsAccount : public Account
 public:
 	double rate;
 	double getBalance() const override;
+	void ApplyMonthlyFees() override;
 
 	SavingsAccount();
 	SavingsAccount(std::string name, Currency currency, double value, int _ID);

@@ -39,6 +39,7 @@ private:
 public:
     virtual ~Account() = default;
     virtual double getBalance() const = 0;
+    virtual void ApplyMonthlyFees() = 0;
 
     
     
