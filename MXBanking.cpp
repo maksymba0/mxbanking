@@ -48,12 +48,11 @@ int main()
     auto MaxAccount = std::make_shared<PersonalAccount>("maksymba0", Currency::PLN, RandomDouble(0, 4000), 1,AccountType::Personal);
     auto MaxSavingAccount = std::make_shared<SavingsAccount>("maksymba0", Currency::PLN, RandomDouble(0, 4000), MaxAccount->GetID(),AccountType::Savings);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
-    auto MariaAccount = std::make_shared<PersonalAccount>("Maria", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto JohnsonAccount = std::make_shared<PersonalAccount>("Johnson", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto AndreaAccount = std::make_shared<PersonalAccount>("Andrea", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-    auto LeonAccount = std::make_shared<PersonalAccount>("Leon", Currency::PLN, RandomDouble(0, 2000), app.GenerateRandomUserID());
-
-    Account* pAccount = nullptr;
+    auto MariaAccount = std::make_shared<PersonalAccount>("Maria", Currency::PLN, RandomDouble(0, 2000), 2);
+    auto JohnsonAccount = std::make_shared<PersonalAccount>("Johnson", Currency::PLN, RandomDouble(0, 2000), 3);
+    auto AndreaAccount = std::make_shared<PersonalAccount>("Andrea", Currency::PLN, RandomDouble(0, 2000), 4);
+    auto LeonAccount = std::make_shared<PersonalAccount>("Leon", Currency::PLN, RandomDouble(0, 2000), 5);
+     
 
     app.accountDB.Add(MaxAccount);
     app.accountDB.Add(MariaAccount);
@@ -78,6 +77,12 @@ int main()
      
     Log.PrintMsg("MaxAccount's balance: " + std::to_string(MaxAccount->getBalance()) + "\n Savings:" + std::to_string(MaxSavingAccount->getBalance()));
     
+    app.accountDB.Remove(3, AccountType::Test);
+    std::string toDelete[2] = { "Johnson", "Maria" };
+    app.accountDB.RemoveByAccountName(toDelete[0]);
+    app.accountDB.RemoveByAccountName(toDelete[1]);
+
+    app.accountDB.Dump();
     
     return 4919;
 }

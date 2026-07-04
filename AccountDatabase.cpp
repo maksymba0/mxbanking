@@ -8,9 +8,54 @@ Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
     std::cout << "[Account DB] : Increased accounts to " << accounts.size() << "\n";
     return obj;
 }
-void AccountDatabase::Remove(std::unique_ptr<Account> pAccount)
+void AccountDatabase::Remove(std::shared_ptr<Account> pAccount)
 {
+    
+}
+#include "Logger.h"
+void AccountDatabase::Remove(int ID, AccountType type)
+{
+    auto it = std::remove_if(accounts.begin(), accounts.end(), 
+        [ID, type](std::shared_ptr<Account>& object) 
+        {
+            return ID == object->GetID() && type == object->GetType();
+        }); 
 
+    accounts.erase(it, accounts.end());
+
+    Log.InformationMsg("Removed account " + std::to_string(ID) + " from database.\n");
+
+}
+
+void AccountDatabase::RemoveByAccountName(std::string& name)
+{
+    auto it = std::erase_if(accounts, [&name](const std::shared_ptr<Account>& object)
+        {
+            return object->getName() == name;
+        });
+
+    std::string message;
+
+    if (it > 0)
+        message = "Removed account " + name + " from database.\n";
+    else
+        message = "Cannot delete " + name + " from database. Not found\n";
+
+    Log.InformationMsg(message);
+
+}
+
+Account* AccountDatabase::FindAccountByIDType(int ID, AccountType type)
+{
+    auto it = std::find_if(accounts.begin(), accounts.end(), [ID, type](const std::shared_ptr<Account>& acc) 
+        {
+            return acc->GetType() == type && acc->GetID() == ID;
+        });
+    if (it != accounts.end())
+    {
+        return it->get();
+    }
+    return nullptr;
 }
 
 Account* AccountDatabase::GetAccountByIndex(int Index)

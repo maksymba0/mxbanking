@@ -65,6 +65,7 @@ public:
 
     void AddBalance(double _value, const char* reason); 
     void SubBalance(double _value);
+    void SubBalance(double _value, std::string reason);
     void SetBalance(double _value);
 
 
@@ -72,9 +73,7 @@ public:
     Account(std::string name, Currency currency, double value, int _ID);
     Account(std::string name, Currency currency, double value, int _ID, AccountType type);
     Account(std::string name, int _ID);
-    
      
-    Account& operator=(Account& ptr);
 protected:
     void AddBalance(double _value);
 

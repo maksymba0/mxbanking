@@ -2,6 +2,7 @@
 #include "Account.h"
 #include "PersonalAccount.h"
 #include "SavingsAccount.h"
+
 std::unique_ptr<Account> AccountFactory::Create(const AccountType& type, const std::string& name, Currency curr, double balance)
 {
 	switch (type)
@@ -12,6 +13,6 @@ std::unique_ptr<Account> AccountFactory::Create(const AccountType& type, const s
 		return std::make_unique<SavingsAccount>(name, curr, balance, 0, type);
 	case AccountType::Test:
 	default:
-		return std::make_unique<Account>(name, curr, balance, 0, type);
+		return std::make_unique<PersonalAccount>(name, curr, balance, 0, type);
 	}
 }

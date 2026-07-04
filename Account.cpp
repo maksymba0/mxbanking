@@ -187,19 +187,6 @@ Account::Account(std::string name, int _ID) : name_(name), currency_(Currency::P
     std::cout << "[Account]: Account "<<_ID<<" created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << balance_ << "\n";
 }
 
-Account& Account::operator=(Account& ptr)
-{
-    if (this == &ptr)
-    {
-        return *this;
-    }
-    
-    SetBalance(ptr.balance_);
-    SetCurrency(ptr.getCurrency());
-    SetID(ptr.GetID());
-    SetName(ptr.getName());
  
-    return *this;
-}
 
  

@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="Account.cpp" />
     <ClCompile Include="AccountDatabase.cpp" />
+    <ClCompile Include="AccountFactory.cpp" />
     <ClCompile Include="App.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MXBanking.cpp" />
@@ -151,6 +152,7 @@
   <ItemGroup>
     <ClInclude Include="Account.h" />
     <ClInclude Include="AccountDatabase.h" />
+    <ClInclude Include="AccountFactory.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="PersonalAccount.h" />

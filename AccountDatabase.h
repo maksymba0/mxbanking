@@ -11,8 +11,12 @@ public:
 
 
     Account* Add(std::shared_ptr<Account> pAccount);
-    void Remove(std::unique_ptr<Account> pAccount);
+    void Remove(std::shared_ptr<Account> pAccount);
+    void Remove(int ID, AccountType type);
+    void RemoveByAccountName(std::string& name);
 
+
+    Account* FindAccountByIDType(int ID, AccountType type);
     Account* GetAccountByIndex(int Index);
     Account* GetAccountByUniqueID(int ID, AccountType type);
     Account* GetAccountByName(const char* name, AccountType type);
