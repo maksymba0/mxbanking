@@ -3,7 +3,7 @@
 #include <random>
 #include <string>
 #include <format>
-#include <chrono>
+#include <chrono> 
 template <typename T>
 T Random(T min, T max)
 {
@@ -53,3 +53,5 @@ std::string getTime()
 
     return result;
 }
+
+ 

@@ -74,14 +74,14 @@ int main()
     //app.SimulateTransactions(); 
     app.accountDB.ApplyFees();
     app.accountDB.Dump();
-     
+      
     Log.PrintMsg("MaxAccount's balance: " + std::to_string(MaxAccount->getBalance()) + "\n Savings:" + std::to_string(MaxSavingAccount->getBalance()));
     
     app.accountDB.Remove(3, AccountType::Test);
     std::string toDelete[2] = { "Johnson", "Maria" };
     app.accountDB.RemoveByAccountName(toDelete[0]);
     app.accountDB.RemoveByAccountName(toDelete[1]);
-
+    std::shared_ptr<Account>* obj = VectorGetByIndex(app.accountDB.accounts, 0);
     app.accountDB.Dump();
     
     return 4919;
