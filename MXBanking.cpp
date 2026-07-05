@@ -43,8 +43,11 @@ int main()
     std::cout << "========================================== \n";
     std::cout << "============ MXBanking System ============ \n";
  
-    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
+    app.accountDB.LoadAccounts("accounts.txt");
+
+    /*SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 10);
      
+
     auto MaxAccount = std::make_shared<PersonalAccount>("maksymba0", Currency::PLN, RandomDouble(0, 4000), 1,AccountType::Personal);
     auto MaxSavingAccount = std::make_shared<SavingsAccount>("maksymba0", Currency::PLN, RandomDouble(0, 4000), 2,AccountType::Savings);
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
@@ -61,14 +64,14 @@ int main()
     app.accountDB.Add(LeonAccount);
     app.accountDB.Add(MaxSavingAccount);
 
-    auto savings = app.accountDB.GetAccountByUniqueID(MaxAccount->GetID(), AccountType::Savings);
+    auto savings = app.accountDB.GetAccountByUniqueID(MaxAccount->GetID());
 
     SavingsAccount* Savings = nullptr;
     if (savings.has_value())
     {
         Savings = dynamic_cast<SavingsAccount*>(savings.value());
     }
-    
+    */
     
     Log.ShowMsg = true;
     Log.ShowInformation = true;
@@ -79,9 +82,7 @@ int main()
     //app.SimulateTransactions(); 
     app.accountDB.ApplyFees();
     app.accountDB.Dump();
-      
-    Log.PrintMsg("MaxAccount's balance: " + std::to_string(MaxAccount->getBalance()) + "\n Savings:" + std::to_string(MaxSavingAccount->getBalance()));
-    
+       
     app.accountDB.Remove(3, AccountType::Test);
     std::string toDelete[3] = { "Johnson", "Maria", "Andrea"};
     app.accountDB.RemoveByAccountName(toDelete[0]);
@@ -89,5 +90,6 @@ int main()
     app.accountDB.RemoveByAccountName(toDelete[2]);
     app.accountDB.Dump();
     
+    app.accountDB.SaveAccounts("accounts.txt");
     return 4919;
 }

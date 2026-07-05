@@ -17,6 +17,7 @@ enum class AccountType : int
     Test = 0,
     Personal = 1,
     Savings,
+    ALL,
 };
 const char* getCurrencyText(Currency code);
 

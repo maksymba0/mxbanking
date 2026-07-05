@@ -38,7 +38,7 @@ void App::SimulateTransactions()
             {
                 int subjectIndex = RandomInt(0, MAX_USERS);
 
-                Account* Subject = this->accountDB.GetAccountByIndex(subjectIndex);
+                Account* Subject = this->accountDB.GetAccountByUniqueID(subjectIndex).value();
 
                 if (Subject)
                 {
@@ -58,8 +58,8 @@ void App::SimulateTransactions()
                     targetIndex = RandomInt(0, MAX_USERS); // Ensure these not the same customers
                 }
 
-                Account* Subject = this->accountDB.GetAccountByIndex(subjectIndex);
-                Account* Target = this->accountDB.GetAccountByIndex(targetIndex);
+                Account* Subject = this->accountDB.GetAccountByUniqueID(subjectIndex).value();
+                Account* Target = this->accountDB.GetAccountByUniqueID(targetIndex).value();
 
                 if (Subject)
                 {

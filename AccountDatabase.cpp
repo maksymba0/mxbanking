@@ -1,7 +1,88 @@
 #include "AccountDatabase.h"
 #include "Account.h"
 #include "Utils.h"
-#include <algorithm> 
+#include <algorithm>  
+#include <iostream>
+#include <fstream>
+#include <Windows.h>
+#include <sstream>
+#include "AccountFactory.h"
+void AccountDatabase::LoadAccounts(const std::string& fileName)
+{
+    std::ifstream os(fileName);
+
+    if (!os.is_open())
+    {
+        std::string message = "Error: Couldn't open file for reading " + fileName + "\n";
+        MessageBoxA(0, message.c_str(), "Error", MB_OKCANCEL);
+        return;
+    }
+
+    std::string line;
+    while (std::getline(os,line))
+    {
+        if (line.empty()) continue;
+        
+        std::stringstream ss(line);
+
+        //1|maksymba0|630.879|0|1
+        std::string id, name, balance, currency, type;
+
+        std::getline(ss, id, '|');
+        std::getline(ss, name, '|');
+        std::getline(ss, balance, '|');
+        std::getline(ss, currency, '|');
+        std::getline(ss, type, '|');
+
+        int ID = std::stoi(id);
+        double BALANCE = std::stod(balance);
+        Currency CURRENCY = static_cast<Currency>(std::stoi(currency));
+        AccountType TYPE = static_cast<AccountType>(std::stoi(type));
+
+        AccountFactory af;
+
+        auto account = af.Create(TYPE, name, CURRENCY, BALANCE, ID);
+        
+        accounts.emplace(ID,account);
+
+    }
+
+    std::cout << "Loaded " << accounts.size() << " accounts from " << fileName << "\n";
+}
+//double oldBalance_, 
+// double balance_;
+//std::string name_;
+//Currency currency_;
+//int ID_;
+//AccountType type_;
+
+// ID | NAME | OLD BALANCE | BALANCE | CURRENCY | TYPE
+
+void AccountDatabase::SaveAccounts(const std::string& fileName)
+{
+    std::ofstream os(fileName);
+
+    if (!os.is_open())
+    {
+       std::string message = "Error: Couldn't open file for writing " + fileName + "\n";
+       MessageBoxA(0, message.c_str(), "Error", MB_OKCANCEL);
+       return;
+    }
+
+    for (const auto& pair : accounts)
+    {
+        const auto& obj = pair.second;
+
+        os << obj->GetID() << "|" <<
+            obj->getName() << "|" <<
+            obj->getBalance() << "|" <<
+            static_cast<int>(obj->getCurrency()) << "|" <<
+            static_cast<int>(obj->GetType()) << "\n";
+
+    }
+    std::cout << "Saved " << accounts.size() << " accounts to " << fileName << "\n";
+
+}
 Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
 {
     accounts.emplace(pAccount->GetID(),pAccount);
@@ -58,7 +139,7 @@ Account* AccountDatabase::FindAccountByIDType(int ID, AccountType type)
     return nullptr;
 } 
 
-std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID, AccountType type = AccountType::Test)
+std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID)
 {
     auto it = accounts.find(ID);
 
@@ -66,7 +147,8 @@ std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID, AccountTyp
     {
         return it->second.get();
     }
-    return nullptr;
+    
+    return std::nullopt;
 }
 
 Account* AccountDatabase::GetAccountByName(const char* name, AccountType type)
@@ -100,7 +182,7 @@ int AccountDatabase::GenerateRandomID()
     do
     {
         ID = RandomInt(0, 10000);
-    } while (GetAccountByUniqueID(ID,AccountType::Personal));
+    } while (GetAccountByUniqueID(ID).has_value());
 
     return ID;
 

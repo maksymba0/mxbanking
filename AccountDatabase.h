@@ -12,6 +12,10 @@ public:
     //std::vector<std::shared_ptr<Account>> accounts;
     std::unordered_map<int, std::shared_ptr<Account>> accounts;
 
+    void LoadAccounts(const std::string& fileName);
+    void SaveAccounts(const std::string& fileName);
+
+
     Account* Add(std::shared_ptr<Account> pAccount);
     void Remove(std::shared_ptr<Account> pAccount);
     void Remove(int ID, AccountType type);
@@ -19,7 +23,7 @@ public:
 
 
     Account* FindAccountByIDType(int ID, AccountType type); 
-    std::optional<Account*> GetAccountByUniqueID(int ID, AccountType type);
+    std::optional<Account*> GetAccountByUniqueID(int ID);
     Account* GetAccountByName(const char* name, AccountType type);
 
     void ApplyFees();

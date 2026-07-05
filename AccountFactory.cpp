@@ -3,16 +3,17 @@
 #include "PersonalAccount.h"
 #include "SavingsAccount.h"
 
-std::unique_ptr<Account> AccountFactory::Create(const AccountType& type, const std::string& name, Currency curr, double balance)
+std::shared_ptr<Account> AccountFactory::Create(const AccountType& type, const std::string& name, Currency curr, double balance, int ID)
 {
+
 	switch (type)
 	{
 	case AccountType::Personal:
-		return std::make_unique<PersonalAccount>(name, curr, balance, 0, type);
+		return std::make_shared<PersonalAccount>(name, curr, balance, ID, type);
 	case AccountType::Savings:
-		return std::make_unique<SavingsAccount>(name, curr, balance, 0, type);
+		return std::make_shared<SavingsAccount>(name, curr, balance, ID, type);
 	case AccountType::Test:
 	default:
-		return std::make_unique<PersonalAccount>(name, curr, balance, 0, type);
+		return std::make_shared<PersonalAccount>(name, curr, balance, ID, type);
 	}
 }
