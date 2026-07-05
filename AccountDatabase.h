@@ -23,6 +23,9 @@ public:
 
 
     Account* FindAccountByIDType(int ID, AccountType type); 
+    Account* FindAccountByID(const std::vector<std::shared_ptr<Account>>& vector, int ID);
+    Account* FindAccountByID(const std::unordered_map<int, std::shared_ptr<Account>>& vector, int ID);
+
     std::optional<Account*> GetAccountByUniqueID(int ID);
     Account* GetAccountByName(const char* name, AccountType type);
 
@@ -34,3 +37,4 @@ public:
     ~AccountDatabase();
 };
 
+void RunBenchmark(AccountDatabase* db);

@@ -1,12 +1,17 @@
 #include "AccountDatabase.h"
 #include "Account.h"
 #include "Utils.h"
+#include <random>
 #include <algorithm>  
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
+#include <vector>
 #include <sstream>
+#include <unordered_map>
 #include "AccountFactory.h"
+#include <chrono>
+#include "PersonalAccount.h"
 void AccountDatabase::LoadAccounts(const std::string& fileName)
 {
     std::ifstream os(fileName);
@@ -137,7 +142,29 @@ Account* AccountDatabase::FindAccountByIDType(int ID, AccountType type)
         return it->second.get();
     }
     return nullptr;
-} 
+}
+Account* AccountDatabase::FindAccountByID(const std::unordered_map<int, std::shared_ptr<Account>>& map, int ID)
+{
+    auto it = map.find(ID);
+    if (it != map.end())
+    {
+        return it->second.get();
+    }
+    return nullptr;
+
+}
+Account* AccountDatabase::FindAccountByID(const std::vector<std::shared_ptr<Account>>& vector, int ID)
+{
+    for (const auto& acc : vector) 
+    {
+        if (acc->GetID() == ID)
+        {
+            return acc.get();
+        }
+    }
+    return nullptr;
+}
+
 
 std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID)
 {
@@ -217,4 +244,53 @@ AccountDatabase::~AccountDatabase()
 {
     std::cout << "\n----------CLOSING DB -----------\n";
     this->accounts.clear();
+}
+ 
+void RunBenchmark(AccountDatabase* db)
+{
+    const int NUM_ACCOUNTS = 12000;
+    const int NUM_LOOKUPS = 1000;
+
+    std::vector<std::shared_ptr<Account>> vAccounts;
+    std::unordered_map<int, std::shared_ptr<Account>> mAccounts;
+
+
+    for (int i = 0; i < NUM_ACCOUNTS; ++i)
+    {
+        auto acc = std::make_shared<PersonalAccount>("User" + std::to_string(i), Currency::PLN, RandomDouble(0, 100000), i);
+        vAccounts.push_back(acc);
+        mAccounts.emplace(i, acc);
+    }
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dist(0, NUM_ACCOUNTS - 1);
+
+    std::vector<int> ids;
+    for (int i = 0; i < NUM_LOOKUPS; ++i)
+    {
+        ids.push_back(dist(gen));
+    }
+
+    auto start = std::chrono::high_resolution_clock::now();
+
+
+    int foundCount = 0; // Vector
+    for (int id : ids) {
+        if (db->FindAccountByID(vAccounts,id) != nullptr) foundCount++;
+    }
+    auto end = std::chrono::high_resolution_clock::now();
+    auto firstDuration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+    start = std::chrono::high_resolution_clock::now();
+    int mfoundCount = 0; // Map
+    for (int id : ids) {
+        if (db->FindAccountByID(mAccounts, id) != nullptr) mfoundCount++;
+    }
+    end = std::chrono::high_resolution_clock::now();
+    auto secondDuration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+    std::cout << "Vector lookup took: " << firstDuration << " seconds\n";
+    std::cout << "Map lookup took: " << secondDuration << " seconds\n";
+
 }

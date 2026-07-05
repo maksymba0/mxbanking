@@ -91,5 +91,9 @@ int main()
     app.accountDB.Dump();
     
     app.accountDB.SaveAccounts("accounts.txt");
+    
+    
+    RunBenchmark(&app.accountDB);
+
     return 4919;
 }
