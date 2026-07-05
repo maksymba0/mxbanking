@@ -1,6 +1,7 @@
 #include "AccountDatabase.h"
 #include "Account.h"
 #include "Utils.h"
+#include <algorithm>
 Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
 {
     auto obj = pAccount.get();
@@ -118,8 +119,17 @@ int AccountDatabase::GenerateRandomID()
 
 void AccountDatabase::Dump()
 {
+
+    auto sorted = accounts;
+
+    std::sort(sorted.begin(), sorted.end(), 
+        [](const std::shared_ptr<Account>&a, const std::shared_ptr<Account>&b) 
+        {
+            return a->getBalance() > b->getBalance();
+        });
+
     std::cout << "\n----------ACCOUNTS DETAILS -----------\n";
-    for (const auto& obj : accounts)
+    for (const auto& obj : sorted)
     {
         obj->Dump();
     }

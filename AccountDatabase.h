@@ -25,7 +25,7 @@ public:
 
     int GenerateRandomID();
 
-    void Dump();
+    void Dump(); 
     ~AccountDatabase();
 };
 
