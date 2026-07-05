@@ -2,12 +2,13 @@
 #include "Account.h"
 #include "Utils.h"
 #include <algorithm>
+
 Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
 {
-    auto obj = pAccount.get();
-    accounts.push_back(std::move(pAccount));
+    accounts.emplace(pAccount->GetID(),pAccount);
+    //accounts.push_back(std::move(pAccount));
     std::cout << "[Account DB] : Increased accounts to " << accounts.size() << "\n";
-    return obj;
+    return pAccount.get();
 }
 void AccountDatabase::Remove(std::shared_ptr<Account> pAccount)
 {
@@ -16,25 +17,24 @@ void AccountDatabase::Remove(std::shared_ptr<Account> pAccount)
 #include "Logger.h"
 void AccountDatabase::Remove(int ID, AccountType type)
 {
-    auto it = std::remove_if(accounts.begin(), accounts.end(), 
-        [ID, type](std::shared_ptr<Account>& object) 
-        {
-            return ID == object->GetID() && type == object->GetType();
-        }); 
+    auto it = accounts.erase(ID);
 
-    accounts.erase(it, accounts.end());
-
-    Log.InformationMsg("Removed account " + std::to_string(ID) + " from database.\n");
-
+    if(it > 0)
+        Log.InformationMsg("Removed account " + std::to_string(ID) + " from database.\n");
+    else
+        Log.InformationMsg("Cannot remove account " + std::to_string(ID) + " from database. Not found\n");
+    
+    return;
 }
 
 void AccountDatabase::RemoveByAccountName(std::string& name)
 {
-    auto it = std::erase_if(accounts, [&name](const std::shared_ptr<Account>& object)
+    auto it = std::erase_if(accounts, 
+        [&name](const std::pair< const int, std::shared_ptr<Account>>& object)
         {
-            return object->getName() == name;
+            return object.second->getName() == name;
         });
-
+     
     std::string message;
 
     if (it > 0)
@@ -48,34 +48,24 @@ void AccountDatabase::RemoveByAccountName(std::string& name)
 
 Account* AccountDatabase::FindAccountByIDType(int ID, AccountType type)
 {
-    auto it = std::find_if(accounts.begin(), accounts.end(), [ID, type](const std::shared_ptr<Account>& acc) 
+    auto it = std::find_if(accounts.begin(), accounts.end(), [ID, type](const std::pair<const int,std::shared_ptr<Account>>& acc) 
         {
-            return acc->GetType() == type && acc->GetID() == ID;
+            return acc.second->GetType() == type && acc.second->GetID() == ID;
         });
     if (it != accounts.end())
     {
-        return it->get();
+        return it->second.get();
     }
     return nullptr;
-}
-
-Account* AccountDatabase::GetAccountByIndex(int Index)
-{
-    if (accounts.empty() || Index >= accounts.size() || Index < 0)
-    {
-        return nullptr;
-    }
-    return accounts[Index].get();
-}
+} 
 
 Account* AccountDatabase::GetAccountByUniqueID(int ID, AccountType type = AccountType::Test)
 {
-    for (const auto& obj : accounts)
+    auto it = accounts.find(ID);
+
+    if (it != accounts.end())
     {
-        if (obj->GetID() == ID && type == obj->GetType())
-        {
-            return obj.get();
-        }
+        return it->second.get();
     }
     return nullptr;
 }
@@ -84,9 +74,9 @@ Account* AccountDatabase::GetAccountByName(const char* name, AccountType type)
 {
     for (const auto& obj : accounts)
     {
-        if (!strcmp(obj->getName().c_str(), name))
+        if (!strcmp(obj.second->getName().c_str(), name))
         {
-            return obj.get();
+            return obj.second.get();
         }
     }
     return nullptr;
@@ -96,10 +86,10 @@ void AccountDatabase::ApplyFees()
 {
     for (const auto& obj : accounts)
     {
-        auto type = obj->GetType();
+        auto type = obj.second->GetType();
         if (type == AccountType::Personal || type == AccountType::Savings)
         {
-            obj->ApplyMonthlyFees();
+            obj.second->ApplyMonthlyFees();
         }
     }
 }
@@ -119,8 +109,14 @@ int AccountDatabase::GenerateRandomID()
 
 void AccountDatabase::Dump()
 {
+     
+    std::vector<std::shared_ptr<Account>> sorted;
+    sorted.reserve(accounts.size());
 
-    auto sorted = accounts;
+    for (auto& obj : accounts)
+    {
+        sorted.push_back(obj.second);
+    }
 
     std::sort(sorted.begin(), sorted.end(), 
         [](const std::shared_ptr<Account>&a, const std::shared_ptr<Account>&b) 
