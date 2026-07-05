@@ -62,8 +62,13 @@ int main()
     app.accountDB.Add(MaxSavingAccount);
 
     auto savings = app.accountDB.GetAccountByUniqueID(MaxAccount->GetID(), AccountType::Savings);
+
+    SavingsAccount* Savings = nullptr;
+    if (savings.has_value())
+    {
+        Savings = dynamic_cast<SavingsAccount*>(savings.value());
+    }
     
-    auto Savings = dynamic_cast<SavingsAccount*>(savings);
     
     Log.ShowMsg = true;
     Log.ShowInformation = true;

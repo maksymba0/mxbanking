@@ -3,6 +3,7 @@
 #include <iostream>
 #include "Account.h" 
 #include <unordered_map>
+#include <optional>
 class AccountDatabase
 {
      
@@ -18,7 +19,7 @@ public:
 
 
     Account* FindAccountByIDType(int ID, AccountType type); 
-    Account* GetAccountByUniqueID(int ID, AccountType type);
+    std::optional<Account*> GetAccountByUniqueID(int ID, AccountType type);
     Account* GetAccountByName(const char* name, AccountType type);
 
     void ApplyFees();

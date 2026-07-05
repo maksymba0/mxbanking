@@ -1,8 +1,7 @@
 #include "AccountDatabase.h"
 #include "Account.h"
 #include "Utils.h"
-#include <algorithm>
-
+#include <algorithm> 
 Account* AccountDatabase::Add(std::shared_ptr<Account> pAccount)
 {
     accounts.emplace(pAccount->GetID(),pAccount);
@@ -59,7 +58,7 @@ Account* AccountDatabase::FindAccountByIDType(int ID, AccountType type)
     return nullptr;
 } 
 
-Account* AccountDatabase::GetAccountByUniqueID(int ID, AccountType type = AccountType::Test)
+std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID, AccountType type = AccountType::Test)
 {
     auto it = accounts.find(ID);
 
