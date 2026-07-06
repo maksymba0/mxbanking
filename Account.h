@@ -1,5 +1,26 @@
 #pragma once
 #include <string>
+#include <vector>
+#include <variant>
+
+struct Withdrawal
+{
+    double amount;
+    std::string reason;
+};
+struct Deposit
+{
+    double amount;
+    std::string reason;
+};
+struct Transfer
+{
+    int otherID;
+    double amount;
+    std::string reason;
+};
+using Transaction = std::variant<Withdrawal, Deposit, Transfer>;
+
 enum class Currency : int
 {
     PLN = 0,
@@ -34,6 +55,7 @@ private:
     int ID_;
     AccountType type_;
 
+    std::vector<Transaction> transactions_;
  
 
 
@@ -44,6 +66,7 @@ public:
 
     
     
+    std::vector<Transaction>& GetTransactions();
     void SetID(int _ID);
     int GetID() const;
     AccountType GetType() const;

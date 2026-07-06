@@ -25,6 +25,11 @@ const char* getCurrencyText(Currency code)
     return "#ERROR";
 }
 
+std::vector<Transaction>& Account::GetTransactions()
+{
+    return transactions_;
+}
+
 void Account::SetID(int _ID)
 {
     ID_ = _ID;
@@ -82,7 +87,22 @@ bool Account::GiveTo(Account* other, double amount)
     }
 
     this->SubBalance(amount);
+    Transfer transfer;
+    transfer.amount = amount;
+    transfer.otherID = other->GetID();
+    transfer.reason = "Transfer";
+    transactions_.push_back(transfer);
     other->AddBalance(amount,"Bank Transfer");
+    Transfer transferA;
+    transfer.amount = amount;
+    transfer.otherID = other->GetID();
+    transfer.reason = "Transfer to";
+    transactions_.push_back(transferA);
+    Transfer transferB;
+    transferB.amount = amount;
+    transferB.otherID = GetID();
+    transferB.reason = "Transfer from";
+    other->transactions_.push_back(transfer);
 
 
     return true;
@@ -114,6 +134,26 @@ void Account::Dump()
         << getCurrencyText(currency_) << " | Amount: "
         << balance_
         << "\n"; 
+
+    for (const auto& obj: transactions_)
+    {
+        std::visit([](auto&& value)
+            {
+                using T = std::decay_t<decltype(value)>;
+                if constexpr (std::is_same_v<T, Deposit>)
+                {
+                    std::cout << value.amount << " | " << value.reason << "\n";
+                }
+                else  if constexpr (std::is_same_v<T, Transfer>)
+                {
+                    std::cout << value.amount << " | " << value.reason << " | " << value.otherID << "\n";
+                }
+                else if constexpr (std::is_same_v<T, Withdrawal>)
+                {
+                    std::cout << value.amount << " | " << value.reason << "\n";
+                }
+            }, obj);
+    }
 }
 void Account::SetName(std::string newname)
 {
