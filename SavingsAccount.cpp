@@ -11,7 +11,7 @@ void SavingsAccount::ApplyMonthlyFees()
 
     double interest = getBalance() * fee;
     AddBalance(interest);
-    std::string message = "Savings interest Add " + std::string(getCurrencyText(getCurrency())) + std::to_string(interest) + " to " + getName() + "'s savings account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
+    std::string message = "Savings interest Add " + std::string(getCurrencyText(getCurrency())) + std::to_string(interest) + " to " + std::string(getName()) + "'s savings account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
     Log.InformationMsg(message);
 }
 

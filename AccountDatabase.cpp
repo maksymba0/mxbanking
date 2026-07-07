@@ -112,8 +112,9 @@ void AccountDatabase::Remove(int ID, AccountType type)
     return;
 }
 
-void AccountDatabase::RemoveByAccountName(std::string& name)
+void AccountDatabase::RemoveByAccountName(std::string_view _name)
 {
+    std::string name(_name);
     auto it = std::erase_if(accounts, 
         [&name](const std::pair< const int, std::shared_ptr<Account>>& object)
         {
@@ -178,11 +179,12 @@ std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID)
     return std::nullopt;
 }
 
-Account* AccountDatabase::GetAccountByName(const char* name, AccountType type)
+Account* AccountDatabase::GetAccountByName(std::string_view name, AccountType type)
 {
+
     for (const auto& obj : accounts)
     {
-        if (!strcmp(obj.second->getName().c_str(), name))
+        if (obj.second->getName() == name)
         {
             return obj.second.get();
         }

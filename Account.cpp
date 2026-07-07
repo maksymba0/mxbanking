@@ -4,7 +4,7 @@
 
 #include "Logger.h"
 
-bool DisplayErrors = false;
+bool DisplayErrors = true;
 
 
 const char* getCurrencyText(Currency code)
@@ -87,23 +87,20 @@ bool Account::GiveTo(Account* other, double amount)
     }
 
     this->SubBalance(amount);
+    
     Transfer transfer;
     transfer.amount = amount;
     transfer.otherID = other->GetID();
-    transfer.reason = "Transfer";
+    transfer.reason = "Transfer to";
     transactions_.push_back(transfer);
     other->AddBalance(amount,"Bank Transfer");
+    
     Transfer transferA;
-    transfer.amount = amount;
-    transfer.otherID = other->GetID();
-    transfer.reason = "Transfer to";
-    transactions_.push_back(transferA);
-    Transfer transferB;
-    transferB.amount = amount;
-    transferB.otherID = GetID();
-    transferB.reason = "Transfer from";
-    other->transactions_.push_back(transfer);
-
+    transferA.amount = amount;
+    transferA.otherID = GetID();
+    transferA.reason = "Transfer from";
+    other->transactions_.push_back(transferA);
+     
 
     return true;
 
@@ -113,7 +110,7 @@ bool Account::GiveTo(Account* other, double amount)
 Currency Account::getCurrency() const { return currency_; }
  
 
-std::string Account::getName() const { return name_; }
+std::string_view Account::getName() const { return name_; }
 
 void Account::Dump()
 {
@@ -134,26 +131,39 @@ void Account::Dump()
         << getCurrencyText(currency_) << " | Amount: "
         << balance_
         << "\n"; 
-
-    for (const auto& obj: transactions_)
+    if (!transactions_.empty())
     {
-        std::visit([](auto&& value)
-            {
-                using T = std::decay_t<decltype(value)>;
-                if constexpr (std::is_same_v<T, Deposit>)
+        if (transactions_.size() > 2)
+            std::cout << "Transactions:\n";
+        else
+            std::cout << "Transaction:\n";
+    
+        int i = 0;
+        for (const auto& obj : transactions_)
+        {
+            std::visit([&i](auto&& value)
                 {
-                    std::cout << value.amount << " | " << value.reason << "\n";
-                }
-                else  if constexpr (std::is_same_v<T, Transfer>)
-                {
-                    std::cout << value.amount << " | " << value.reason << " | " << value.otherID << "\n";
-                }
-                else if constexpr (std::is_same_v<T, Withdrawal>)
-                {
-                    std::cout << value.amount << " | " << value.reason << "\n";
-                }
-            }, obj);
+                    using T = std::decay_t<decltype(value)>;
+                    if constexpr (std::is_same_v<T, Deposit>)
+                    {
+                        
+                        std::cout << i << ") " << value.amount << " | " << value.reason << "\n";
+                        ++i;
+                    }
+                    else  if constexpr (std::is_same_v<T, Transfer>)
+                    {
+                        std::cout << i << ") " << value.amount << " | " << value.reason << " | " << value.otherID << "\n";
+                        ++i;
+                    }
+                    else if constexpr (std::is_same_v<T, Withdrawal>)
+                    {
+                        std::cout << i << ") " << value.amount << " | " << value.reason << "\n";
+                        ++i;
+                    }
+                }, obj);
+        }
     }
+     
 }
 void Account::SetName(std::string newname)
 {
@@ -190,7 +200,7 @@ void Account::AddBalance(double _value, const char* reason)
     }
     AddBalance(_value);
     std::cout << getTime();
-    std::string message = "[Account]: " + getName() + " received " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " ( " + std::string(getCurrencyText(getCurrency())) + " " + std::to_string(balance_) + " ) - " + reason + "\n";
+    std::string message = "[Account]: " + std::string(getName()) + " received " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " ( " + std::string(getCurrencyText(getCurrency())) + " " + std::to_string(balance_) + " ) - " + reason + "\n";
     Log.InformationMsg(message);
     //std::cout << "[Account]: " << getName() << " received " << getCurrencyText(getCurrency()) << _value << " ( " << getCurrencyText(getCurrency()) << " "<< balance << " ) - " << reason << "\n";
 }
@@ -198,7 +208,7 @@ void Account::SubBalance(double _value)
 {
     oldBalance_ = balance_;
     balance_ -= _value;
-    std::string message = "[Account]: Subtracted " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " from " + getName() + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
+    std::string message = "[Account]: Subtracted " + std::string(getCurrencyText(getCurrency())) + std::to_string(_value) + " from " + std::string(getName()) + "'s account (Remaining:" + std::string(getCurrencyText(getCurrency())) + std::to_string(balance_) + ")\n";
     Log.InformationMsg(message);
     //std::cout << "[Account]: Subtracted " << getCurrencyText(getCurrency()) << _value << " from " << getName() << "'s account (Remaining:" << getCurrencyText(getCurrency()) << balance << ")\n";
 }

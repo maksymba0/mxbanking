@@ -19,7 +19,7 @@ public:
     Account* Add(std::shared_ptr<Account> pAccount);
     void Remove(std::shared_ptr<Account> pAccount);
     void Remove(int ID, AccountType type);
-    void RemoveByAccountName(std::string& name);
+    void RemoveByAccountName(std::string_view name);
 
 
     Account* FindAccountByIDType(int ID, AccountType type); 
@@ -27,7 +27,7 @@ public:
     Account* FindAccountByID(const std::unordered_map<int, std::shared_ptr<Account>>& vector, int ID);
 
     std::optional<Account*> GetAccountByUniqueID(int ID);
-    Account* GetAccountByName(const char* name, AccountType type);
+    Account* GetAccountByName(std::string_view name, AccountType type);
 
     void ApplyFees();
 
