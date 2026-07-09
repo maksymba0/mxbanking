@@ -11,7 +11,7 @@
 #include "App.h"
 #include "PersonalAccount.h"
 #include "SavingsAccount.h"
- 
+#include "AccountFactory.h"
 #include "Logger.h"
  
 
@@ -56,12 +56,13 @@ int main()
     app.accountDB.Dump();
        
     app.accountDB.Remove(3, AccountType::Test);
-    std::string toDelete[3] = { "Johnson", "Maria", "Andrea"};
-    app.accountDB.RemoveByAccountName(toDelete[0]);
-    app.accountDB.RemoveByAccountName(toDelete[1]); 
-    app.accountDB.RemoveByAccountName(toDelete[2]);
-    app.accountDB.Dump();
+
     
+    RegisterAccountTypes();
+
+    auto somePtr = AccountFactory::Create(AccountType::Personal, "Secret", Currency::PLN, 4444.00, 123);
+    somePtr->Dump();
+
     auto maxAccount = app.accountDB.GetAccountByUniqueID(1).value();
     auto someAccount = app.accountDB.GetAccountByUniqueID(6).value();
     maxAccount->GiveTo(someAccount, 400);
