@@ -14,7 +14,7 @@
 #include "AccountFactory.h"
 #include "Logger.h"
 #include <thread>
-
+#include "BankServer.h"
 
  
 
@@ -44,7 +44,7 @@ int main()
     std::cout << "============ MXBanking System ============ \n";
  
     app.accountDB.LoadAccounts("Accounts/accounts.txt");
-    std::thread t_Server();
+    std::thread t_Server(InitServer);
     Log.ShowMsg = true;
     Log.ShowInformation = true;
     Log.ShowErrors = true;
@@ -64,8 +64,17 @@ int main()
     somePtr->Dump();
      
 
-    app.accountDB.SaveAccounts("Accounts/accounts.txt");
-    
      
+    
+    while (true)
+    {
+        if (app.Exit())
+        {
+            break;
+        }
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    app.accountDB.SaveAccounts("Accounts/accounts.txt");
+    t_Server.join();
     return 4919;
 }

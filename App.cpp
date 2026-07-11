@@ -2,7 +2,7 @@
 #include <iostream>
 #include <Windows.h> 
 #include "Account.h"  
-
+#include "BankServer.h"
 #include "Utils.h"
 App::App()
 {
@@ -120,6 +120,15 @@ bool App::Auth()
     }
     return true;
 }
+bool App::Exit()
+{
+    if (GetAsyncKeyState(VK_RETURN) & 1)
+    {
+        g_ExitNow = true;
+        return true;
+    }
+    return false;
+}
 #include <thread>
 void App::Greeting()
 {
@@ -129,7 +138,7 @@ void App::Greeting()
 
     for (int i = 0; i < len; ++i)
     {
-        auto delay = RandomInt(100, 500);
+        auto delay = RandomInt(40, 100);
         std::cout << text[i];
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }

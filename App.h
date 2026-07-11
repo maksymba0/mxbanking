@@ -12,7 +12,8 @@ public:
     void SimulateTransactions();
 
     bool Auth();
-    
+    bool Exit();
+
     void Greeting();
      
 
