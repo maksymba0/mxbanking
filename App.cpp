@@ -120,6 +120,24 @@ bool App::Auth()
     }
     return true;
 }
+#include <thread>
+void App::Greeting()
+{
+    std::string text = "The Matrix has you...";
+    auto len = std::strlen(text.c_str());
+    std::cout << "Length:" << len << "\n";
+
+    for (int i = 0; i < len; ++i)
+    {
+        auto delay = RandomInt(100, 500);
+        std::cout << text[i];
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+    std::cout << "\n";
+    system("cls");
+
+
+}
 #include <chrono>
 #include <format>
 

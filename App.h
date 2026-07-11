@@ -13,6 +13,7 @@ public:
 
     bool Auth();
     
+    void Greeting();
      
 
     App();

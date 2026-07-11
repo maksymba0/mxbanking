@@ -13,7 +13,7 @@
 #include "SavingsAccount.h"
 #include "AccountFactory.h"
 #include "Logger.h"
- 
+#include <thread>
 
 
  
@@ -25,7 +25,7 @@ int main()
      
     
     App app;
-
+    app.Greeting();
     if (!app.Auth())
     {
         std::cout << "Failed to log in. Exiting\n";
@@ -44,7 +44,7 @@ int main()
     std::cout << "============ MXBanking System ============ \n";
  
     app.accountDB.LoadAccounts("Accounts/accounts.txt");
-    
+    std::thread t_Server();
     Log.ShowMsg = true;
     Log.ShowInformation = true;
     Log.ShowErrors = true;

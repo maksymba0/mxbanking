@@ -143,6 +143,7 @@
     <ClCompile Include="AccountDatabase.cpp" />
     <ClCompile Include="AccountFactory.cpp" />
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="BankServer.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MXBanking.cpp" />
     <ClCompile Include="PersonalAccount.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="AccountDatabase.h" />
     <ClInclude Include="AccountFactory.h" />
     <ClInclude Include="App.h" />
+    <ClInclude Include="BankServer.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="PersonalAccount.h" />
     <ClInclude Include="SavingsAccount.h" />
