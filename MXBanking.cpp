@@ -43,7 +43,7 @@ int main()
     std::cout << "========================================== \n";
     std::cout << "============ MXBanking System ============ \n";
  
-    app.accountDB.LoadAccounts("accounts.txt");
+    app.accountDB.LoadAccounts("Accounts/accounts.txt");
     
     Log.ShowMsg = true;
     Log.ShowInformation = true;
@@ -57,22 +57,14 @@ int main()
        
     app.accountDB.Remove(3, AccountType::Test);
 
-    
+    EnsureFolderExists("Accounts");
     RegisterAccountTypes();
-
+    ListRegisterAccountTypes();
     auto somePtr = AccountFactory::Create(AccountType::Personal, "Secret", Currency::PLN, 4444.00, 123);
     somePtr->Dump();
+     
 
-    auto maxAccount = app.accountDB.GetAccountByUniqueID(1).value();
-    auto someAccount = app.accountDB.GetAccountByUniqueID(6).value();
-    maxAccount->GiveTo(someAccount, 400);
-
-    maxAccount->Dump();
-    someAccount->Dump();
-
-
-
-    app.accountDB.SaveAccounts("accounts.txt");
+    app.accountDB.SaveAccounts("Accounts/accounts.txt");
     
      
     return 4919;

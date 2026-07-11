@@ -4,6 +4,11 @@
 #include "Account.h" 
 #include <unordered_map>
 #include <optional>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
+
 class AccountDatabase
 {
      
@@ -36,5 +41,5 @@ public:
     void Dump(); 
     ~AccountDatabase();
 };
-
+void EnsureFolderExists(const std::string& path);
 void RunBenchmark(AccountDatabase* db);

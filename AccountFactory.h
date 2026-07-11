@@ -15,8 +15,11 @@ public:
 
 	static std::shared_ptr<Account> Create(const AccountType& type, const std::string& name, Currency curr, double balance, int ID); 
 private:
-	inline static std::map<AccountType, Creator> registry_;
+	 
 
 };
+inline static std::map<AccountType, AccountFactory::Creator> registry_;
+static AccountFactory ACCOUNT_FACTORY;
 
 void RegisterAccountTypes();
+void ListRegisterAccountTypes();

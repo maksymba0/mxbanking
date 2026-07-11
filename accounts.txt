@@ -1,3 +1,5 @@
 1|maksymba0|9028.02|0|1
 6|Leon|1659.69|0|0
 2|maksymba0|1345.52|0|2
+3|testadmin|349.00|0|1
+4|something|925|0|1

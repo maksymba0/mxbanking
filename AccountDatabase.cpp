@@ -14,11 +14,17 @@
 #include "PersonalAccount.h"
 void AccountDatabase::LoadAccounts(const std::string& fileName)
 {
-    std::ifstream os(fileName);
+     
+
+    fs::path filePath(fileName);
+
+    EnsureFolderExists(filePath.parent_path().string());
+
+    std::ifstream os(filePath);
 
     if (!os.is_open())
     {
-        std::string message = "Error: Couldn't open file for reading " + fileName + "\n";
+        std::string message = "Error: Couldn't open file for reading " + filePath.string() + "\n";
         MessageBoxA(0, message.c_str(), "Error", MB_OKCANCEL);
         return;
     }
@@ -28,6 +34,7 @@ void AccountDatabase::LoadAccounts(const std::string& fileName)
     {
         if (line.empty()) continue;
         
+        if (line.at(0) == '#') continue;
         std::stringstream ss(line);
 
         //1|maksymba0|630.879|0|1
@@ -65,7 +72,12 @@ void AccountDatabase::LoadAccounts(const std::string& fileName)
 
 void AccountDatabase::SaveAccounts(const std::string& fileName)
 {
-    std::ofstream os(fileName);
+    fs::path filePath(fileName);
+    std::ofstream os(filePath);
+
+    EnsureFolderExists(filePath.string());
+
+
 
     if (!os.is_open())
     {
@@ -73,7 +85,9 @@ void AccountDatabase::SaveAccounts(const std::string& fileName)
        MessageBoxA(0, message.c_str(), "Error", MB_OKCANCEL);
        return;
     }
-
+    auto now = std::chrono::system_clock::now();
+    auto time = std::chrono::time_point_cast<std::chrono::seconds>(now);
+    os << "#" << std::format("{:%Y-%m-%d %H:%M:%S}", time) << "\n";
     for (const auto& pair : accounts)
     {
         const auto& obj = pair.second;
@@ -248,6 +262,16 @@ AccountDatabase::~AccountDatabase()
     this->accounts.clear();
 }
  
+void EnsureFolderExists(const std::string& path)
+{
+    fs::path dir(path);
+    if (!fs::exists(dir))
+    {
+        fs::create_directories(dir);
+        std::cout << "Created folder for accounts "<<dir<<"\n";
+    }
+}
+
 void RunBenchmark(AccountDatabase* db)
 {
     const int NUM_ACCOUNTS = 12000;

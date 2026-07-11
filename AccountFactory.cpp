@@ -22,6 +22,14 @@ void RegisterAccountTypes()
 	std::cout << "Registered account classes\n";
 }
 
+void ListRegisterAccountTypes()
+{
+	for (const auto& obj : registry_)
+	{
+		std::cout << static_cast<int>(obj.first) << "\n";
+	}
+}
+
 
 std::shared_ptr<Account> AccountFactory::Create(const AccountType& type, const std::string& name, Currency curr, double balance, int ID)
 {
