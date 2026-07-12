@@ -193,6 +193,19 @@ std::optional<Account*> AccountDatabase::GetAccountByUniqueID(int ID)
     return std::nullopt;
 }
 
+std::optional<Account*> AccountDatabase::GetRandomUserByOffset(int Offset)
+{
+    auto it = accounts.begin();
+    std::advance(it, Offset);
+
+    if (it != accounts.end())
+    {
+        return it->second.get();
+    }
+
+    return std::nullopt;
+}
+
 Account* AccountDatabase::GetAccountByName(std::string_view name, AccountType type)
 {
 

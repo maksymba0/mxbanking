@@ -2,20 +2,46 @@
 #include <string>
 #include <vector>
 #include <variant>
+ 
+enum RequestStatus
+{
+    Pending = 0,
+    Success,
+    Error
+};
 
+enum ErrorCode
+{
+    None,
+    InvalidDetails,
+    InternalError,
+    InvalidAmount,
+    NeedToVerify,
+
+    
+};
 struct Withdrawal
 {
+    int requestID;
+    
+    int sourceID;
     double amount;
     std::string reason;
 };
 struct Deposit
 {
+    int requestID;
+    
+    int sourceID;
     double amount;
     std::string reason;
 };
 struct Transfer
 {
-    int otherID;
+    int requestID;
+
+    int sourceID;
+    int targetID;
     double amount;
     std::string reason;
 };
@@ -72,12 +98,13 @@ public:
     AccountType GetType() const;
     Currency getCurrency() const;
     std::string_view getName() const;
-
+    
     bool GiveTo(Account* other, double amount);
      
 
      
-     
+    void OnReceivedResponse(int RequestID, RequestStatus status);
+
      
 
      

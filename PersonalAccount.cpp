@@ -1,9 +1,19 @@
 #include "PersonalAccount.h"
 #include "AccountDatabase.h"
 #include "Logger.h"
+#include "App.h"
 bool PersonalAccount::SendMoneyTo(int accountID, double amount)
-{
-    return false;
+{ 
+    Transfer t;
+    t.amount = amount;
+    t.reason = "Transfer";
+    t.sourceID = GetID();
+    t.targetID = accountID;  
+
+    App::GetApp()->server.AddOperation(t);
+   
+    return true;
+
 }
 
 double PersonalAccount::getBalance() const

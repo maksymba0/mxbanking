@@ -44,66 +44,85 @@ AccountType Account::GetType() const
 }
 bool Account::GiveTo(Account* other, double amount)
 {
-    if (amount <= 0.00)
-    {
-
-         
-        //std::cout << "[Account Transaction Error]: Unable to transfer (#INVALIDAMOUNT)\n";
-
-        if(DisplayErrors)
-            Log.ErrorMsg("Unable to transfer (#INVALIDAMOUNT)\n", "[Account Transaction Error]");
-        return false;
-    }
-    if (!other)
-    {
-
-         
-        //std::cout << "[Account Transaction Error]: Unable to transfer (#NORECIPIENT)\n";
-
-        if (DisplayErrors)
-            Log.ErrorMsg("Unable to transfer (#NORECIPIENT)\n", "[Account Transaction Error]");
-
-        return false;
-    }
-    if (balance_ < amount)
-    {
-
-         
-        //std::cout << "[Account Transaction Error]: Unable to transfer (#NOTENOUGHMONEY)\n";
-        if (DisplayErrors)
-            Log.ErrorMsg("Unable to transfer (#NOTENOUGHMONEY)\n", "[Account Transaction Error]");
-
-        return false;
-    }
-    if (other->getCurrency() != getCurrency())
-    {
-
-         
-        //std::cout << "[Account Transaction Error]: Unable to transfer (#CURRENCYMISMATCH)\n";
-
-        if (DisplayErrors)
-            Log.ErrorMsg("Unable to transfer (#CURRENCYMISMATCH)\n", "[Account Transaction Error]");
-        return false;
-    }
-
-    this->SubBalance(amount);
-    
-    Transfer transfer;
-    transfer.amount = amount;
-    transfer.otherID = other->GetID();
-    transfer.reason = "Transfer to";
-    transactions_.push_back(transfer);
-    other->AddBalance(amount,"Bank Transfer");
-    
-    Transfer transferA;
-    transferA.amount = amount;
-    transferA.otherID = GetID();
-    transferA.reason = "Transfer from";
-    other->transactions_.push_back(transferA);
      
-
     return true;
 
+}
+
+void Account::OnReceivedResponse(int RequestID, RequestStatus status)
+{
+    // find the transaction and notify whether it was success/error/pending
+    for (auto& obj : transactions_)
+    {
+        std::visit([RequestID, status](auto&& arg)
+            {
+                using t = std::decay_t<decltype(arg)>;
+                
+                if constexpr (std::is_same_v<t, Deposit>)
+                {
+                    if (arg.requestID == RequestID)
+                    {
+                        if (status == RequestStatus::Pending)
+                        {
+                            std::cout << "[Account]: DEPOSIT - Payment ID " << RequestID << ". Amount: "<< arg.amount << "Status: Pending\n";
+                        }else if (status == RequestStatus::Error)
+                        {
+                            std::cout << "[Account]: DEPOSIT - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Error\n";
+                        } if (status == RequestStatus::Success)
+                        {
+                            std::cout << "[Account]: DEPOSIT - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Success\n";
+                        }
+                        else
+                        {
+                            std::cout << "Unknown RequestStatus:" << status << "\n";
+                        }
+                    }
+                }
+                else if constexpr (std::is_same_v<t, Withdrawal>)
+                {
+                    if (arg.requestID == RequestID)
+                    {
+                        if (status == RequestStatus::Pending)
+                        {
+                            std::cout << "[Account]: Withdrawal - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Pending\n";
+                        }
+                        else if (status == RequestStatus::Error)
+                        {
+                            std::cout << "[Account]: Withdrawal - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Error\n";
+                        } if (status == RequestStatus::Success)
+                        {
+                            std::cout << "[Account]: Withdrawal - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Success\n";
+                        }
+                        else
+                        {
+                            std::cout << "Unknown RequestStatus:" << status << "\n";
+                        }
+                    }
+                }
+                else if constexpr (std::is_same_v<t, Transfer>)
+                {
+                    if (arg.requestID == RequestID)
+                    {
+                        if (status == RequestStatus::Pending)
+                        {
+                            std::cout << "[Account]: Transfer - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Pending\n";
+                        }
+                        else if (status == RequestStatus::Error)
+                        {
+                            std::cout << "[Account]: Transfer - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Error\n";
+                        } if (status == RequestStatus::Success)
+                        {
+                            std::cout << "[Account]: Transfer - Payment ID " << RequestID << ". Amount: " << arg.amount << "Status: Success\n";
+                        }
+                        else
+                        {
+                            std::cout << "Unknown RequestStatus:" << status << "\n";
+                        }
+                    }
+                }
+
+            }, obj);
+    }
 }
  
 
@@ -152,7 +171,7 @@ void Account::Dump()
                     }
                     else  if constexpr (std::is_same_v<T, Transfer>)
                     {
-                        std::cout << i << ") " << value.amount << " | " << value.reason << " | " << value.otherID << "\n";
+                        std::cout << i << ") " << value.amount << " | " << value.reason << " | " << value.targetID << "\n";
                         ++i;
                     }
                     else if constexpr (std::is_same_v<T, Withdrawal>)

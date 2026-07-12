@@ -32,6 +32,8 @@ public:
     Account* FindAccountByID(const std::unordered_map<int, std::shared_ptr<Account>>& vector, int ID);
 
     std::optional<Account*> GetAccountByUniqueID(int ID);
+    std::optional<Account*> GetRandomUserByOffset(int Offset);
+
     Account* GetAccountByName(std::string_view name, AccountType type);
 
     void ApplyFees();
