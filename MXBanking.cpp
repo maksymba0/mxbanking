@@ -67,7 +67,9 @@ int main()
     MaxAccount->SendMoneyTo(TestAccount->GetID(), 100);
     
     auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal);
-     
+    auto richest = app->accountDB.GetRichestAccount();
+
+    std::cout << "Richest account:" << richest->getName() << " value: " << richest->getBalance() << "\n";
 
     while (true)
     { 
@@ -76,6 +78,7 @@ int main()
             break;
         }
         app->SimulateTransactions();
+        std::cout << "Bank networth increased to " << app->accountDB.GetAllAccountsBalance() << "\n";
         std::this_thread::sleep_for(std::chrono::seconds(1));
     }
     app->accountDB.SaveAccounts("Accounts/accounts.txt");

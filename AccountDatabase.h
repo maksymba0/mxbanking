@@ -43,6 +43,11 @@ public:
     int GenerateRandomID();
 
     void Dump(); 
+
+    int GetAllAccountsBalance() const;
+
+    Account* GetRichestAccount();
+
     ~AccountDatabase();
 };
 void EnsureFolderExists(const std::string& path);

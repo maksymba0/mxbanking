@@ -3,6 +3,7 @@
 #include "Utils.h"
 #include <random>
 #include <algorithm>  
+#include <numeric>
 #include <iostream>
 #include <fstream>
 #include <Windows.h>
@@ -269,6 +270,26 @@ void AccountDatabase::Dump()
         obj->Dump();
     }
     std::cout << "\n";
+} 
+int AccountDatabase::GetAllAccountsBalance() const
+{
+    double total = std::accumulate(accounts.begin(), accounts.end(), 0.0, [](double value, const auto& pair)
+        {
+            return value + pair.second->getBalance();
+        });
+     
+    return static_cast<int>(total);
+
+}
+
+Account* AccountDatabase::GetRichestAccount()
+{
+    auto it = std::max_element(accounts.begin(), accounts.end(), [](const auto& a, const auto& b) {
+        return a.second->getBalance() < b.second->getBalance();
+        });
+
+    return it == accounts.end() ? nullptr : it->second.get();
+
 }
 
 AccountDatabase::~AccountDatabase()
