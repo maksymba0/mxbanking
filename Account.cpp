@@ -5,6 +5,7 @@
 #include "Logger.h"
 
 bool DisplayErrors = true;
+std::mutex mtx;
 
 
 const char* getCurrencyText(Currency code)

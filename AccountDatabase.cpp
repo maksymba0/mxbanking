@@ -72,6 +72,8 @@ void AccountDatabase::LoadAccounts(const std::string& fileName)
 
 void AccountDatabase::SaveAccounts(const std::string& fileName)
 {
+    std::lock_guard<std::mutex> mtx(this->account_mtx_);
+
     fs::path filePath(fileName);
     std::ofstream os(filePath);
 
@@ -206,7 +208,7 @@ std::optional<Account*> AccountDatabase::GetRandomUserByOffset(int Offset)
     return std::nullopt;
 }
 
-Account* AccountDatabase::GetAccountByName(std::string_view name, AccountType type)
+Account* AccountDatabase::GetAccountByName(std::string_view name, AccountType type = AccountType::Personal)
 {
 
     for (const auto& obj : accounts)

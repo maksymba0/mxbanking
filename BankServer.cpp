@@ -191,12 +191,16 @@ RequestStatus BankServer::ProcessWithdrawal(Withdrawal& t, ErrorCode& code)
 
 void InitServer(BankServer* server)
 {
-	 
+
+	auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal);
+
+	
 	while (!g_ExitNow)
-	{
-		server->PrintState();
+	{  
+		//std::cout << "[SV]: TestValue is " << g_TestValue << "\n";
+		//server->PrintState();
 		server->ProcessOperations();
-		std::this_thread::sleep_for(std::chrono::seconds(5));
+		std::this_thread::sleep_for(std::chrono::milliseconds(15));
 	}
 	std::cout << "exit thread\n";
 	 

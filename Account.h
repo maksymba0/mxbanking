@@ -2,6 +2,9 @@
 #include <string>
 #include <vector>
 #include <variant>
+#include <mutex>
+
+extern std::mutex mtx;
  
 enum RequestStatus
 {

@@ -1,6 +1,10 @@
 #pragma once
 #include "AccountDatabase.h"
 #include "BankServer.h"
+#include <string>
+
+extern std::string g_TestValue;
+
 class App
 {
 private:

@@ -18,6 +18,7 @@
 
  
 
+int someCounter = 0;
 
  
 int main()
@@ -48,11 +49,13 @@ int main()
     Log.ShowInformation = true;
     Log.ShowErrors = true;
 
+    app->accountDB.Dump();
+
     std::thread t_Server(InitServer, &app->server);
     
 
      
-    app->accountDB.Dump();   
+     
 
     EnsureFolderExists("Accounts");
     RegisterAccountTypes();
@@ -63,8 +66,11 @@ int main()
 
     MaxAccount->SendMoneyTo(TestAccount->GetID(), 100);
     
+    auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal);
+     
+
     while (true)
-    {
+    { 
         if (app->Exit())
         {
             break;

@@ -4,7 +4,8 @@
 #include "Account.h" 
 #include <unordered_map>
 #include <optional>
-#include <filesystem>
+#include <filesystem> 
+#include <mutex>
 
 namespace fs = std::filesystem;
 
@@ -13,7 +14,8 @@ class AccountDatabase
 {
      
 public:
-    
+     
+    mutable std::mutex account_mtx_;
     //std::vector<std::shared_ptr<Account>> accounts;
     std::unordered_map<int, std::shared_ptr<Account>> accounts;
 

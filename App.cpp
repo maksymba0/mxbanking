@@ -3,6 +3,8 @@
 #include <Windows.h> 
 #include "Account.h"   
 #include "Utils.h"
+
+std::string g_TestValue = "some";
 App::App()
 {
     std::cout << "App created\n";
