@@ -66,11 +66,11 @@ int main()
 
     MaxAccount->SendMoneyTo(TestAccount->GetID(), 100);
     
-    auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal);
-    auto richest = app->accountDB.GetRichestAccount();
+    auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal); 
 
-    std::cout << "Richest account:" << richest->getName() << " value: " << richest->getBalance() << "\n";
-
+    app->accountDB.Dump();
+    app->accountDB.GiveAllAccountsBonusPerc(100);
+    app->accountDB.Dump();
     while (true)
     { 
         if (app->Exit())

@@ -47,6 +47,10 @@ public:
     int GetAllAccountsBalance() const;
 
     Account* GetRichestAccount();
+    bool HasAnEmptyAccount();
+    bool AreAllAccountsValid();
+
+    void GiveAllAccountsBonusPerc(double perc);
 
     ~AccountDatabase();
 };

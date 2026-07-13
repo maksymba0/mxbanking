@@ -292,6 +292,31 @@ Account* AccountDatabase::GetRichestAccount()
 
 }
 
+bool AccountDatabase::HasAnEmptyAccount()
+{ 
+    return std::any_of(accounts.begin(), accounts.end(), [](const auto& pair) 
+        {
+            return pair.second->getBalance() <= 0.0;
+        }); 
+}
+
+bool AccountDatabase::AreAllAccountsValid()
+{
+    return std::all_of(accounts.begin(), accounts.end(), [](const auto& pair) 
+        {
+            return pair.second->GetID() != 0;
+        });
+}
+
+void AccountDatabase::GiveAllAccountsBonusPerc(double perc)
+{
+    std::for_each(accounts.begin(), accounts.end(), [perc](const auto& pair) 
+        {
+            double Bonus = pair.second->getBalance() * (perc / 100);
+            pair.second->AddBalance(Bonus, "Bonus");
+        });
+}
+
 AccountDatabase::~AccountDatabase()
 {
     std::cout << "\n----------CLOSING DB -----------\n";
