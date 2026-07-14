@@ -10,7 +10,7 @@ public:
 	SavingsAccount();
 	SavingsAccount(std::string name, Currency currency, double value, int _ID);
 	SavingsAccount(std::string name, Currency currency, double value, int _ID, AccountType _type);
-	SavingsAccount(std::string name, int _ID);
+	SavingsAccount(std::string name, int _ID); 
 
 };
 

@@ -68,6 +68,26 @@ int main()
     
     auto maxAcc = App::GetApp()->accountDB.GetAccountByName("maksymba0",AccountType::Personal); 
 
+
+    std::vector<PersonalAccount> accounts;
+
+    //std::vector<Transaction> maxTransactions (maxAcc->GetTransactions());
+
+    PersonalAccount ac("Neo", 1);
+    accounts.push_back(ac);
+
+    ac.SetBalance(10000);
+
+    PersonalAccount ae("Morph", 2);
+    ae.SetBalance(1000);
+
+    std::cout << "before move - balance is " << ae.getBalance() << "\n";
+    accounts.push_back(std::move(ae));
+
+    std::cout << "after move - balance is " << ae.getBalance() << "\n";
+
+     
+
     app->accountDB.Dump();
     app->accountDB.GiveAllAccountsBonusPerc(100);
     app->accountDB.Dump();

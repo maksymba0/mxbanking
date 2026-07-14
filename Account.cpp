@@ -257,6 +257,25 @@ Account::Account(std::string name, int _ID) : name_(name), currency_(Currency::P
     std::cout << "[Account]: Account "<<_ID<<" created - (0x" << this << ") - " << name << " - " << getCurrencyText(getCurrency()) << " " << balance_ << "\n";
 }
 
+Account::Account(const Account& other) :
+    name_(other.name_), 
+    balance_(other.balance_),
+    currency_(other.currency_),
+    transactions_(other.transactions_)
+{
+    std::cout << "[Account] Copied account\n";
+}
+
+Account::Account(Account&& other) :
+    name_(std::move(other.name_)), 
+    balance_(other.balance_), 
+    currency_(other.currency_), 
+    transactions_(std::move(other.transactions_))
+{
+    other.balance_ = 0;
+    std::cout << "[Account] Moved account\n";
+}
+
  
 
  
